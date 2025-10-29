@@ -14,16 +14,204 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_predictions: {
+        Row: {
+          created_at: string | null
+          id: string
+          model_version: string | null
+          predicted_risk_probability: number | null
+          project_id: string
+          suggestion_message: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          model_version?: string | null
+          predicted_risk_probability?: number | null
+          project_id: string
+          suggestion_message?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          model_version?: string | null
+          predicted_risk_probability?: number | null
+          project_id?: string
+          suggestion_message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_predictions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          developers_assigned_count: number | null
+          duration_estimated_days: number | null
+          id: string
+          initial_requirements_count: number | null
+          name: string
+          project_type: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          developers_assigned_count?: number | null
+          duration_estimated_days?: number | null
+          id?: string
+          initial_requirements_count?: number | null
+          name: string
+          project_type: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          developers_assigned_count?: number | null
+          duration_estimated_days?: number | null
+          id?: string
+          initial_requirements_count?: number | null
+          name?: string
+          project_type?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      risks: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          impact: string
+          mitigation_plan: string | null
+          probability: string
+          project_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          impact: string
+          mitigation_plan?: string | null
+          probability: string
+          project_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          impact?: string
+          mitigation_plan?: string | null
+          probability?: string
+          project_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "risks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          assignee_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          priority: string
+          project_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          assignee_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          priority?: string
+          project_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          assignee_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          priority?: string
+          project_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "jefe_proyecto" | "desarrollador"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +338,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["jefe_proyecto", "desarrollador"],
+    },
   },
 } as const
