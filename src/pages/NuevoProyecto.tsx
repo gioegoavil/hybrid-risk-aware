@@ -9,14 +9,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Brain, AlertTriangle } from "lucide-react";
+import { Loader2, Brain, AlertTriangle, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import AIGanttEstimator from "@/components/AIGanttEstimator";
 
 const NuevoProyecto = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [predicting, setPredicting] = useState(false);
+  const [showGantt, setShowGantt] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -311,6 +313,29 @@ const NuevoProyecto = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Botón para generar Gantt */}
+          <div className="flex justify-center">
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={() => setShowGantt(!showGantt)}
+              disabled={!formData.duration_estimated_days}
+              className="gap-2 border-accent/50 hover:bg-accent/10 hover:border-accent transition-all"
+            >
+              <Sparkles className="h-5 w-5 text-accent" />
+              {showGantt ? "Ocultar Cronograma" : "✨ Generar Estimación de Cronograma (IA)"}
+            </Button>
+          </div>
+
+          {/* AI Gantt Estimator */}
+          {showGantt && formData.duration_estimated_days && (
+            <AIGanttEstimator 
+              duration={parseInt(formData.duration_estimated_days)} 
+              startDate={new Date()}
+            />
+          )}
 
           <div className="flex gap-4">
             <Button
